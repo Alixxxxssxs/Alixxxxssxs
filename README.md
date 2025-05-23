@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Carta de Amor - 4 Meses</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=Montserrat:wght@300;400&family=Parisienne&display=swap');
+        
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #fde8e8;
+            font-family: 'Montserrat', sans-serif;
+            overflow-x: hidden;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            touch-action: manipulation;
+            position: fixed;
+            width: 100%;
+            background-image: radial-gradient(circle at center, rgba(255,192,203,0.2) 0%, transparent 50%);
+        }
+        
+        .container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            background: linear-gradient(145deg, #e74c3c, #c0392b);
+            border-radius: 8px;
+            box-shadow: 0 15px 35px rgba(231, 76, 60, 0.3),
+                        0 5px 15px rgba(0, 0, 0, 0.1),
+                        inset 0 -5px 10px rgba(192, 57, 43, 0.5);
+            cursor: pointer;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 1;
+            transform-origin: bottom;
+            animation: pulse 4s ease-in-out infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.02); }
+        }
+        
+        .envelope:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid #d35400;
+            transform-origin: top;
+            transform: rotateX(0deg);
+            transition: all 0.8s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            z-index: 3;
+            filter: drop-shadow(0 -2px 2px rgba(0,0,0,0.2));
+        }
+        
+        .envelope.open:before {
+            transform: rotateX(180deg) translateY(-110px);
+            z-index: 0;
+        }
+        
+        .envelope:after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-bottom: 110px solid #b3473d;
+            z-index: 2;
+        }
+        
+        .heart-icon {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 60px;
+            z-index: 4;
+            transition: all 0.5s ease;
+            animation: heartbeat 1.5s ease infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: translate(-50%, -50%) scale(1); }
+            25% { transform: translate(-50%, -50%) scale(1.1); }
+            50% { transform: translate(-50%, -50%) scale(1); }
+            75% { transform: translate(-50%, -50%) scale(1.05); }
+            100% { transform: translate(-50%, -50%) scale(1); }
+        }
+        
+        .envelope.open .heart-icon {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0.5);
+            animation: none;
+        }
+        
+        .letter {
+            position: absolute;
+            width: 300px;
+            height: 190px;
+            background: linear-gradient(to bottom, #fff9f9, #ffffff);
+            border-radius: 5px;
+            top: 15px;
+            left: 10px;
+            transition: all 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 2;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px;
+            box-sizing: border-box;
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.1);
+            transform-origin: bottom;
+            overflow: hidden;
+            border: 1px solid #f8d7da;
+        }
+        
+        .letter-content {
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.3s;
+        }
+        
+        .letter h2 {
+            font-family: 'Parisienne', cursive;
+            color: #e74c3c;
+            margin-bottom: 10px;
+            font-size: 28px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        
+        .letter p {
+            font-size: 14px;
+            line-height: 1.5;
+            color: #555;
+            font-family: 'Montserrat', sans-serif;
+        }
+        
+        .envelope.open .letter {
+            transform: translateY(-200px);
+            height: auto;
+            min-height: 190px;
+            z-index: 10;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        
+        .envelope.open .letter-content {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .full-page-letter {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(255, 245, 245, 0.98);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            opacity: 0;
+            transition: opacity 0.8s ease;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        
+        .full-page-letter.active {
+            display: flex;
+            opacity: 1;
+            backdrop-filter: blur(3px);
+        }
+        
+        .full-letter-content {
+            max-width: 800px;
+            max-height: 90vh;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+            position: relative;
+            transform: scale(0.9);
+            opacity: 0;
+            transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 1px solid #f8d7da;
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: #e74c3c #f8d7da;
+        }
+        
+        .full-letter-content::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        .full-letter-content::-webkit-scrollbar-track {
+            background: #f8d7da;
+            border-radius: 10px;
+        }
+        
+        .full-letter-content::-webkit-scrollbar-thumb {
+            background-color: #e74c3c;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+        
+        .full-letter-content::-webkit-scrollbar-thumb:hover {
+            background-color: #c0392b;
+        }
+        
+        .full-page-letter.active .full-letter-content {
+            transform: scale(1);
+            opacity: 1;
+        }
+        
+        .full-letter-content h1 {
+            font-family: 'Parisienne', cursive;
+            color: #e74c3c;
+            text-align: center;
+            font-size: 3em;
+            margin-bottom: 30px;
+            animation: textGlow 2s ease infinite alternate;
+        }
+        
+        @keyframes textGlow {
+            from { text-shadow: 0 0 5px rgba(231,76,60,0.3); }
+            to { text-shadow: 0 0 15px rgba(231,76,60,0.5); }
+        }
+        
+        .full-letter-content p {
+            font-size: 1.1em;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 20px;
+            text-align: justify;
+            font-family: 'Playfair Display', serif;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .full-letter-content p:hover {
+            transform: translateX(5px);
+        }
+        
+        .full-letter-content p::first-letter {
+            font-size: 1.5em;
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        
+        .full-letter-content .signature {
+            font-family: 'Parisienne', cursive;
+            font-size: 2em;
+            text-align: right;
+            color: #e74c3c;
+            margin-top: 40px;
+            animation: float 4s ease-in-out infinite;
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            font-size: 1.8em;
+            color: #e74c3c;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border-radius: 50%;
+        }
+        
+        .close-btn:hover {
+            transform: rotate(90deg) scale(1.1);
+            background-color: #f8d7da;
+        }
+        
+        .close-envelope-btn {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 14px;
+            box-shadow: 0 5px 15px rgba(231, 76, 60, 0.4);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            opacity: 0;
+            z-index: 5;
+        }
+        
+        .close-envelope-btn:hover {
+            background-color: #c0392b;
+            transform: translateX(-50%) scale(1.05);
+            box-shadow: 0 7px 20px rgba(231, 76, 60, 0.5);
+        }
+        
+        .envelope.open ~ .close-envelope-btn {
+            opacity: 1;
+            animation: fadeIn 0.5s ease forwards, float 4s ease-in-out infinite;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateX(-50%) translateY(20px); }
+            to { opacity: 1; transform: translateX(-50%) translateY(0); }
+        }
+        
+        .hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+        
+        .heart {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(231, 76, 60, 0.7);
+            transform: rotate(45deg);
+            animation: floatHeart 5s ease-in-out infinite;
+            opacity: 0;
+            filter: drop-shadow(0 0 5px rgba(231,76,60,0.5));
+        }
+        
+        .heart:before, .heart:after {
+            content: '';
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            background-color: rgba(231, 76, 60, 0.7);
+            border-radius: 50%;
+        }
+        
+        .heart:before {
+            top: -12px;
+            left: 0;
+        }
+        
+        .heart:after {
+            top: 0;
+            left: -12px;
+        }
+        
+        @keyframes floatHeart {
+            0% {
+                transform: rotate(45deg) translateY(0) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.8;
+            }
+            90% {
+                opacity: 0.8;
+            }
+            100% {
+                transform: rotate(45deg) translateY(-500px) scale(1.2);
+                opacity: 0;
+            }
+        }
+        
+        .date {
+            text-align: center;
+            margin-top: 30px;
+            font-style: italic;
+            color: #888;
+            font-size: 1.1em;
+            font-family: 'Playfair Display', serif;
+            animation: fadeIn 2s ease;
+        }
+        
+        .envelope-pattern {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.2) 1px, transparent 1px);
+            background-size: 15px 15px;
+            opacity: 0.3;
+            border-radius: 8px;
+        }
+        
+        .emoji-float {
+            position: absolute;
+            font-size: 24px;
+            pointer-events: none;
+            animation: emojiFloat 4s ease-in-out forwards;
+            opacity: 0;
+        }
+        
+        @keyframes emojiFloat {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+        
+        .highlight {
+            animation: highlight 2s ease infinite;
+            display: inline-block;
+        }
+        
+        @keyframes highlight {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        @media (max-width: 768px) {
+            .full-letter-content {
+                padding: 25px;
+                width: 90%;
+                max-height: 85vh;
+            }
+            
+            .full-letter-content h1 {
+                font-size: 2.5em;
+            }
+            
+            .full-letter-content p {
+                font-size: 1em;
+            }
+            
+            .envelope {
+                width: 280px;
+                height: 190px;
+            }
+            
+            .envelope:before {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-top: 95px solid #d35400;
+            }
+            
+            .envelope:after {
+                border-left: 140px solid transparent;
+                border-right: 140px solid transparent;
+                border-bottom: 95px solid #b3473d;
+            }
+            
+            .letter {
+                width: 260px;
+                height: 170px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hearts" id="hearts"></div>
+        
+        <div class="envelope" id="envelope">
+            <div class="envelope-pattern"></div>
+            <div class="heart-icon">❤</div>
+            <div class="letter">
+                <div class="letter-content">
+                    <h2>Para Anne <span class="highlight">💝</span></h2>
+                    <p>Abriendo mi carta especial...</p>
+                </div>
+            </div>
+        </div>
+        
+        <button class="close-envelope-btn" id="closeEnvelopeBtn">Cerrar sobre</button>
+        
+        <div class="full-page-letter" id="fullLetter">
+            <div class="full-letter-content">
+                <button class="close-btn" id="closeBtn">×</button>
+                <h1>Felices 4 meses mi niña <span class="highlight">💗</span></h1>
+                
+                <p><span class="highlight">💞</span> Mi vida, mi razón, mi todo...</p>
+                
+                <p>Hoy celebramos 4 meses de ser oficialmente novios, aunque en mi corazón sé que llevamos mucho más que eso. Cada día a tu lado es un regalo que atesoro con todo mi ser, cada momento contigo es un tesoro que guardo celosamente en el baúl de mis recuerdos más preciados. <span class="highlight">💝</span></p>
+                
+                <p>Recuerdo perfectamente el primer día que te vi, cómo tu sonrisa iluminó todo a tu alrededor y cómo desde ese momento supe que eras alguien especial. Pero nunca imaginé lo maravilloso que sería compartir mi vida contigo, nunca soñé que existiera un amor tan puro y verdadero como el que siento por ti. <span class="highlight">💗</span></p>
+                
+                <p>Estos 4 meses han sido los más felices de mi vida. Cada risa compartida, cada conversación hasta altas horas de la noche, cada mirada cómplice y cada momento a tu lado han llenado mi corazón de una felicidad que no conocía. Has convertido mis días grises en arcoíris de colores, mis tristezas en alegrías y mis miedos en valentía. <span class="highlight">💞</span></p>
+                
+                <p><span class="highlight">💝</span> Eres mi persona favorita para todo: para reírnos de tonterías, para apoyarnos en los momentos difíciles, para soñar juntos con el futuro. Tu amor me ha hecho mejor persona y cada día me inspiras a ser la versión más maravillosa de mí mismo. Contigo he aprendido el verdadero significado del amor incondicional. <span class="highlight">❤️‍🩹</span></p>
+                
+                <p>Me enamoro más de ti con cada día que pasa. De tu bondad, de tu inteligencia, de tu forma única de ver la vida, de cómo me haces sentir amado y especial incluso en los días más simples. Me enamoro de tus detalles, de tu forma de abrazarme, de cómo entiendes mis silencios y celebras mis alegrías. <span class="highlight">💗</span></p>
+                
+                <p><span class="highlight">💞</span> Gracias por elegirme cada día, por tu paciencia, por tu comprensión y por todo el amor que me das. Prometo corresponderte con la misma intensidad y dedicación todos los días de mi vida. Prometo ser tu refugio cuando el mundo sea difícil, tu cómplice en cada locura y tu apoyo incondicional en cada paso del camino. <span class="highlight">💝</span></p>
+                
+                <p>Este es solo el primero de muchos aniversarios que celebraremos juntos. Soñar contigo es mi actividad favorita y no puedo esperar para vivir todas las aventuras que el futuro nos tiene preparado. Quiero despertar a tu lado cada mañana, construir una vida juntos y envejecer a tu lado, riéndonos de nuestras canas y arrugas. <span class="highlight">💗</span></p>
+                
+                <p>Te amo más de lo que las palabras pueden expresar, más de lo que el tiempo puede medir. Eres mi sueño hecho realidad, mi mayor felicidad y el amor de mi vida. Cada latido de mi corazón lleva tu nombre, cada pensamiento tiene un pedacito de ti. <span class="highlight">❤️‍🩹</span></p>
+                
+                <p><span class="highlight">💞</span> En estos 4 meses hemos construido algo hermoso, un amor que crece más fuerte cada día. Y sé que lo mejor está por venir, porque contigo, todo es posible. Eres mi presente y mi futuro, mi siempre y mi para siempre. <span class="highlight">💝</span></p>
+                
+                <div class="signature">Con todo el amor de mi corazón,<br>Tu novio</div>
+                <div class="date">Hoy, 24 de mayo, en nuestro cuarto mes juntos</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const envelope = document.getElementById('envelope');
+        const fullLetter = document.getElementById('fullLetter');
+        const closeBtn = document.getElementById('closeBtn');
+        const closeEnvelopeBtn = document.getElementById('closeEnvelopeBtn');
+        const heartsContainer = document.getElementById('hearts');
+        
+        // Prevenir zoom con gestos táctiles
+        document.addEventListener('gesturestart', function(e) {
+            e.preventDefault();
+        });
+
+        // Prevenir zoom con doble toque
+        let lastTouchEnd = 0;
+        document.addEventListener('touchend', function(event) {
+            const now = (new Date()).getTime();
+            if (now - lastTouchEnd <= 300) {
+                event.preventDefault();
+            }
+            lastTouchEnd = now;
+        }, false);
+        
+        // Función para abrir el sobre con animación mejorada
+        function openEnvelope() {
+            if (envelope.classList.contains('open')) return;
+            
+            envelope.classList.add('open');
+            
+            // Animación de corazones al abrir
+            createHearts(30);
+            createFloatingEmojis(['💗', '💝', '💞', '❤️‍🩹'], 15);
+            
+            // Mostrar la carta completa después de un retraso
+            setTimeout(() => {
+                fullLetter.classList.add('active');
+                createHearts(50);
+                createFloatingEmojis(['💗', '💝', '💞', '❤️‍🩹'], 20);
+            }, 800);
+        }
+        
+        // Abrir automáticamente después de 3 segundos
+        setTimeout(openEnvelope, 3000);
+        
+        // Cerrar la carta completa
+        closeBtn.addEventListener('click', function() {
+            fullLetter.classList.remove('active');
+        });
+        closeBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            fullLetter.classList.remove('active');
+        });
+        
+        // Cerrar el sobre con animación
+        closeEnvelopeBtn.addEventListener('click', function() {
+            fullLetter.classList.remove('active');
+            setTimeout(() => {
+                envelope.classList.remove('open');
+            }, 300);
+        });
+        closeEnvelopeBtn.addEventListener('touchend', function(e) {
+            e.preventDefault();
+            fullLetter.classList.remove('active');
+            setTimeout(() => {
+                envelope.classList.remove('open');
+            }, 300);
+        });
+        
+        // Crear corazones flotantes mejorados
+        function createHearts(count = 20) {
+            heartsContainer.innerHTML = '';
+            
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('heart');
+                
+                const left = Math.random() * 100;
+                const delay = Math.random() * 5;
+                const duration = 3 + Math.random() * 4;
+                const size = 10 + Math.random() * 20;
+                const opacity = 0.5 + Math.random() * 0.5;
+                const colorVar = Math.floor(Math.random() * 30);
+                
+                heart.style.left = `${left}%`;
+                heart.style.bottom = '-20px';
+                heart.style.animationDelay = `${delay}s`;
+                heart.style.animationDuration = `${duration}s`;
+                heart.style.width = `${size}px`;
+                heart.style.height = `${size}px`;
+                heart.style.opacity = opacity;
+                heart.style.setProperty('--heart-color', `rgba(${231-colorVar}, ${76-colorVar}, ${60-colorVar}, ${opacity})`);
+                
+                heartsContainer.appendChild(heart);
+            }
+        }
+        
+        // Crear emojis flotantes
+        function createFloatingEmojis(emojis, count = 10) {
+            for (let i = 0; i < count; i++) {
+                const emoji = document.createElement('div');
+                emoji.classList.add('emoji-float');
+                emoji.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                
+                const left = 20 + Math.random() * 60;
+                const delay = Math.random() * 2;
+                const duration = 3 + Math.random() * 2;
+                const size = 20 + Math.random() * 15;
+                
+                emoji.style.left = `${left}%`;
+                emoji.style.bottom = '0';
+                emoji.style.animationDelay = `${delay}s`;
+                emoji.style.animationDuration = `${duration}s`;
+                emoji.style.fontSize = `${size}px`;
+                
+                document.body.appendChild(emoji);
+                
+                setTimeout(() => {
+                    emoji.remove();
+                }, duration * 1000);
+            }
+        }
+        
+        // Aplicar estilos a los pseudo-elementos de los corazones
+        const style = document.createElement('style');
+        style.textContent = `
+            .heart:before, .heart:after {
+                width: var(--heart-size, 24px);
+                height: var(--heart-size, 24px);
+                background-color: var(--heart-color, rgba(231, 76, 60, 0.7));
+            }
+            .heart:before {
+                top: calc(-1 * var(--heart-half-size, 12px));
+                left: 0;
+            }
+            .heart:after {
+                top: 0;
+                left: calc(-1 * var(--heart-half-size, 12px));
+            }
+        `;
+        document.head.appendChild(style);
+        
+        // Crear corazones iniciales suaves
+        createHearts(10);
+        
+        // Animación de emojis aleatorios en el fondo
+        setInterval(() => {
+            if (Math.random() > 0.7) {
+                createFloatingEmojis(['💗', '💝', '💞', '❤️‍🩹'], 1);
+            }
+        }, 1000);
+    </script>
+</body>
+</html>
